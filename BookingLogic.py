@@ -274,7 +274,7 @@ def occupancy_report(date):
 
 
 def print_room_table():
-    conn = sqlite3.connect('new_test12.db')
+    conn = connect()
     cursor = conn.cursor()
     print("\n-- Room Table --")
     cursor.execute("SELECT * FROM ROOM_TABLE")
