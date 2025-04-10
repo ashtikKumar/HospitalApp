@@ -74,127 +74,17 @@ def get_partial_availability(start_date, end_date, date_range):
     return results
 
 
-# def handle_booking():
-#     start_date = input("Enter Start Date (YYYY-MM-DD): ").strip()
-#     end_date = input("Enter End Date (YYYY-MM-DD): ").strip()
-#     date_range = generate_date_range(start_date, end_date)
-
-#     full_rooms = get_fully_available_rooms(start_date, end_date)
-#     available_rooms = []
-#     total_rent = 0
-
-#     if full_rooms:
-#         for room in full_rooms:
-#             rent = room[4] * len(date_range)
-#             total_rent += rent
-#             available_rooms.append({
-#                 'room_id': room[1],
-#                 'start_date': start_date,
-#                 'end_date': end_date,
-#                 'rent': rent
-#             })
-#     else:
-#         partials = get_partial_availability(start_date, end_date, date_range)
-#         if not partials:
-#             print("No rooms available in the given date range.")
-#             return
-#         for start, room_id, end, rent in partials:
-#             total_rent += rent
-#             available_rooms.append({
-#                 'room_id': room_id,
-#                 'start_date': start,
-#                 'end_date': end,
-#                 'rent': rent
-#             })
-
-#     print("\nAvailable Rooms:")
-#     for room in available_rooms:
-#         print(
-#             f"Room ID: {room['room_id']} | Start: {room['start_date']} | End: {room['end_date']} | Rent: ₹{room['rent']}"
-#         )
-
-#     print(f"\nTotal Rent: ₹{total_rent}")
-#     confirm = input("\nWould you like to proceed with booking? (yes/no): "
-#                     ).strip().lower()
-#     if confirm == 'yes':
-#         conn = connect()
-#         cursor = conn.cursor()
-#         for room in available_rooms:
-#             cursor.execute("SELECT MAX(ID) FROM BOOKING_TABLE")
-#             max_id = cursor.fetchone()[0]
-#             booking_id = (max_id or 0) + 1
-#             cursor.execute(
-#                 "INSERT INTO BOOKING_TABLE (ID, ROOM_ID, START_DATE, END_DATE) VALUES (?, ?, ?, ?)",
-#                 (booking_id, room['room_id'], room['start_date'],
-#                  room['end_date']))
-#         conn.commit()
-#         conn.close()
-#         print("\nBooking successful!")
-
-
-# def handle_booking():
-#     start_date = input("Enter Start Date (YYYY-MM-DD): ").strip()
-#     end_date = input("Enter End Date (YYYY-MM-DD): ").strip()
-#     date_range = generate_date_range(start_date, end_date)
-
-#     full_rooms = get_fully_available_rooms(start_date, end_date)
-#     available_rooms = []
-#     total_rent = 0
-
-#     if full_rooms:
-#         # ✅ Take only the first available room
-#         room = full_rooms[0]
-#         rent = room[4] * len(date_range)
-#         total_rent += rent
-#         available_rooms.append({
-#             'room_id': room[1],
-#             'start_date': start_date,
-#             'end_date': end_date,
-#             'rent': rent
-#         })
-#     else:
-#         partials = get_partial_availability(start_date, end_date, date_range)
-#         if not partials:
-#             print("No rooms available in the given date range.")
-#             return
-#         # ✅ Take only the first partially available room
-#         start, room_id, end, rent = partials[0]
-#         total_rent += rent
-#         available_rooms.append({
-#             'room_id': room_id,
-#             'start_date': start,
-#             'end_date': end,
-#             'rent': rent
-#         })
-
-#     print("\nAvailable Room:")
-#     for room in available_rooms:
-#         print(
-#             f"Room ID: {room['room_id']} | Start: {room['start_date']} | End: {room['end_date']} | Rent: ₹{room['rent']}"
-#         )
-
-#     print(f"\nTotal Rent: ₹{total_rent}")
-#     confirm = input("\nWould you like to proceed with booking? (yes/no): "
-#                     ).strip().lower()
-#     if confirm == 'yes':
-#         conn = connect()
-#         cursor = conn.cursor()
-#         for room in available_rooms:
-#             cursor.execute("SELECT MAX(ID) FROM BOOKING_TABLE")
-#             max_id = cursor.fetchone()[0]
-#             booking_id = (max_id or 0) + 1
-#             cursor.execute(
-#                 "INSERT INTO BOOKING_TABLE (ID, ROOM_ID, START_DATE, END_DATE) VALUES (?, ?, ?, ?)",
-#                 (booking_id, room['room_id'], room['start_date'],
-#                  room['end_date']))
-#         conn.commit()
-#         conn.close()
-#         print("\nBooking successful!")
-
-
 def handle_booking():
     start_date = input("Enter Start Date (YYYY-MM-DD): ").strip()
+    while(start_date < "2025-03-01"):
+        print("Booking not available before 2025-03-01")
+        start_date = input("Enter Start Date (YYYY-MM-DD): ").strip()
+
     end_date = input("Enter End Date (YYYY-MM-DD): ").strip()
+    while(end_date < start_date):
+        print("End date must be after start date.")
+        end_date = input("Enter End Date (YYYY-MM-DD): ").strip()
+
     date_range = generate_date_range(start_date, end_date)
 
     full_rooms = get_fully_available_rooms(start_date, end_date)
@@ -291,7 +181,6 @@ def print_room_table():
     conn.close()
 
 
-
 def print_booking_table():
     conn = connect()
     cursor = conn.cursor()
@@ -302,4 +191,3 @@ def print_booking_table():
     for booking in cursor.fetchall():
         print(f"{booking[0]:<12} | {booking[1]:<8} | {booking[2]:<12} | {booking[3]:<12}")
     conn.close()
-
