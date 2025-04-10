@@ -92,7 +92,7 @@ def handle_booking():
     total_rent = 0
 
     if full_rooms:
-        # ✅ Case 1: Only use the first fully available room
+        # Case 1: Only use the first fully available room
         room = full_rooms[0]
         rent = room[4] * len(date_range)
         total_rent = rent
@@ -108,7 +108,7 @@ def handle_booking():
         print(
             f"Room ID: {room['room_id']} | Start: {room['start_date']} | End: {room['end_date']} | Rent: ₹{room['rent']}")
     else:
-        # ✅ Case 2: Show ALL partial availability options
+        # Case 2: Show ALL partial availability options
         partials = get_partial_availability(start_date, end_date, date_range)
         if not partials:
             print("No rooms available in the given date range.")
